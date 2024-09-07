@@ -7,7 +7,7 @@ static class Program
         double[,] C =
         {
             { 0.2, 2.7, 0.4, 0.5 },
-            { 1.9, 1.5, 0.7, 0.6 },
+            { 1.9, 0.5, 0.7, 0.6 },
             { 0.4, 2.3, 0.3, 0.8 },
             { 0.2, 0.1, 0.9, 1.2 }
         };
@@ -23,7 +23,7 @@ static class Program
         ShowMatrix(C, z);
         Console.WriteLine();
 
-        Gauss(C, z);
+        GaussianElimination(C, z);
 
         Console.WriteLine("Final matrix:");
         ShowMatrix(C, z);
@@ -51,35 +51,35 @@ static class Program
         }
     }
     
-    static void Gauss(double[,] C, double[] z)
+    static void GaussianElimination(double[,] C, double[] z)
     {
         int n = z.Length;
 
         for (int i = 0; i < n; i++)
         {
             int maxRow = i;
-            for (int k = i + 1; k < n; k++)
+            for (int j = i + 1; j < n; j++)
             {
-                if (Math.Abs(C[k, i]) > Math.Abs(C[maxRow, i]))
+                if (Math.Abs(C[j, i]) > Math.Abs(C[maxRow, i]))
                 {
-                    maxRow = k;
+                    maxRow = j;
                 }
             }
 
-            for (int k = i; k < n; k++)
+            for (int j = i; j < n; j++)
             {
-                (C[maxRow, k], C[i, k]) = (C[i, k], C[maxRow, k]);
+                (C[maxRow, j], C[i, j]) = (C[i, j], C[maxRow, j]);
             }
 
             (z[maxRow], z[i]) = (z[i], z[maxRow]);
 
-            for (int k = i + 1; k < n; k++)
+            for (int j = i + 1; j < n; j++)
             {
-                double factor = C[k, i] / C[i, i];
-                z[k] -= factor * z[i];
-                for (int j = i; j < n; j++)
+                double factor = C[j, i] / C[i, i];
+                z[j] -= factor * z[i];
+                for (int k = i; k < n; k++)
                 {
-                    C[k, j] -= factor * C[i, j];
+                    C[j, k] -= factor * C[i, k];
                 }
                 
                 ShowMatrix(C, z);
